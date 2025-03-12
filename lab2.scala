@@ -151,51 +151,51 @@ object IntegratedLabWork {
     }
   }
 
-  private def analyzeText(lang: LangStrings, input: String): Unit = {
-    val vowels = Set(
-      'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U',
-      'а', 'е', 'и', 'і', 'о', 'у', 'є', 'ю', 'я',
-      'А', 'Е', 'И', 'І', 'О', 'У', 'Є', 'Ю', 'Я'
-    )
+private def analyzeText(lang: LangStrings, input: String): Unit = {
+  val vowels = Set(
+    'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U',
+    'а', 'е', 'и', 'і', 'о', 'у', 'є', 'ю', 'я',
+    'А', 'Е', 'И', 'І', 'О', 'У', 'Є', 'Ю', 'Я'
+  )
 
-    val cleanedInput = input.replaceAll("\\d", "").trim
-    val words = cleanedInput.split("\\s+").filter(_.nonEmpty)
+  val cleanedInput = input.replaceAll("[^a-zA-Zа-яА-ЯїЇіІєЄґҐщЩ\\s]", "").trim
+  val words = cleanedInput.split("\\s+").filter(_.nonEmpty)
 
-    val (vowelCount, consonantCount) = cleanedInput.foldLeft((0, 0)) {
-      case ((v, c), char) =>
-        if (vowels.contains(char)) (v + 1, c)
-        else if (char.isLetter) (v, c + 1)
-        else (v, c)
-    }
-
-    val comparisonResult =
-      if (vowelCount > consonantCount) "More vowels/Більше голосних"
-      else if (consonantCount > vowelCount) "More consonants/Більше приголосних"
-      else "Equal/Порівну"
-
-    println(lang.comparison(vowelCount, consonantCount, comparisonResult))
-
-    if (words.nonEmpty) {
-      val lengths = words.map(_.length)
-      val (maxLen, minLen) = (lengths.max, lengths.min)
-
-      println(lang.maxWords(maxLen))
-      println(words.filter(_.length == maxLen).mkString(", "))
-
-      println(lang.minWords(minLen))
-      println(words.filter(_.length == minLen).mkString(", "))
-    } else {
-      println(lang.noWords)
-    }
-
-    val vowelWords = words.filter { word =>
-      word.nonEmpty &&
-        vowels.contains(word.head) &&
-        vowels.contains(word.last)
-    }
-
-    println(lang.vowelWordsHeader)
-    if (vowelWords.nonEmpty) println(vowelWords.mkString(", "))
-    else println(lang.noVowelWords)
+  val (vowelCount, consonantCount) = cleanedInput.foldLeft((0, 0)) {
+    case ((v, c), char) =>
+      if (vowels.contains(char)) (v + 1, c)
+      else if (char.isLetter) (v, c + 1)
+      else (v, c)
   }
+
+  val comparisonResult =
+    if (vowelCount > consonantCount) "More vowels/Більше голосних"
+    else if (consonantCount > vowelCount) "More consonants/Більше приголосних"
+    else "Equal/Порівну"
+
+  println(lang.comparison(vowelCount, consonantCount, comparisonResult))
+
+  if (words.nonEmpty) {
+    val lengths = words.map(_.length)
+    val (maxLen, minLen) = (lengths.max, lengths.min)
+
+    println(lang.maxWords(maxLen))
+    println(words.filter(_.length == maxLen).mkString(", "))
+
+    println(lang.minWords(minLen))
+    println(words.filter(_.length == minLen).mkString(", "))
+  } else {
+    println(lang.noWords)
+  }
+
+  val vowelWords = words.filter { word =>
+    word.nonEmpty &&
+      vowels.contains(word.head) &&
+      vowels.contains(word.last)
+  }
+
+  println(lang.vowelWordsHeader)
+  if (vowelWords.nonEmpty) println(vowelWords.mkString(", "))
+  else println(lang.noVowelWords)
+}
 }
